@@ -1,7 +1,14 @@
 export class Player {
-  public name: string;
+  public x: number = 0;
+  public y: number = 0;
+  public gold: number = 0;
 
-  constructor(opts: { name: string }) {
-    this.name = opts.name;
+  constructor() {
+    window.addEventListener('click', this.movePlayer.bind(this));
+  }
+
+  private movePlayer(event: MouseEvent) {
+    this.x = event.clientX;
+    this.y = event.clientY;
   }
 }
