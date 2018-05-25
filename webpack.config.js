@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-  entry: './src/engine.ts',
+  entry: './src/game.ts',
   module: {
     rules: [
       {

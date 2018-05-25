@@ -9,7 +9,7 @@ export class Player {
   public get moving(): boolean {
     return this.requestedPosition !== undefined;
   }
-  
+
   public get idle(): boolean {
     return this.requestedPosition === undefined;
   }
@@ -35,7 +35,7 @@ export class Player {
         closestMove = possibleMove;
       }
     });
-    
+
     this.currentPosition.x = closestMove.x;
     this.currentPosition.y = closestMove.y;
 
