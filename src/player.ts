@@ -1,8 +1,6 @@
 export class Player {
   public currentPosition = { x: 0, y: 0 };
   public requestedPosition: { x: number, y: number } | undefined;
-  //public moveInProgress: boolean = false;
-  public gold: number = 0;
 
   constructor() {
     window.addEventListener('click', this.requestMove.bind(this));
@@ -18,7 +16,7 @@ export class Player {
 
   public move() {
     if (this.idle) return;
-    
+
     let possibleMoves: any[] = [
       { id: 1, x: this.currentPosition.x - 10, y: this.currentPosition.y - 10 },
       { id: 2, x: this.currentPosition.x, y: this.currentPosition.y - 10 },
