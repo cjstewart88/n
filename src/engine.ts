@@ -27,7 +27,13 @@ export class Engine {
   private draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.drawPlayers();
+    this.drawDummyWall();
     window.requestAnimationFrame(this.draw.bind(this));
+  }
+
+  private drawDummyWall() {
+    this.ctx.fillStyle = 'rgb(255, 0, 0)';
+    this.ctx.fillRect(200, 200, 100, 10);
   }
 
   private drawPlayers() {

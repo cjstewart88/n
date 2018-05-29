@@ -1,6 +1,7 @@
 export class Player {
   public currentPosition = { x: 0, y: 0 };
   public requestedPosition: { x: number, y: number } | undefined;
+  private alreadyVisited: any[] = [];
 
   constructor() {
     window.addEventListener('click', this.requestMove.bind(this));
@@ -28,19 +29,32 @@ export class Player {
       { id: 8, x: this.currentPosition.x - 10, y: this.currentPosition.y }
     ];
 
+    let impossibleMoves: number[] = [];
+    possibleMoves.forEach((pm, i, array) => {
+      // 250, 210
+      if ((pm.x >= 200 && pm.x < 300) && (pm.y >= 200 && pm.y < 210)) {
+        impossibleMoves.push(pm.id);
+      } else if (this.alreadyVisited.indexOf(`${pm.x},${pm.y}`) !== -1) {
+        impossibleMoves.push(pm.id);
+      }
+    });
+
     let closestMove = possibleMoves[0];
     possibleMoves.forEach(possibleMove => {
       possibleMove.distanceFromRequestedMove = Math.abs(possibleMove.x - this.requestedPosition.x) + Math.abs(possibleMove.y - this.requestedPosition.y);
-      if (possibleMove.distanceFromRequestedMove < closestMove.distanceFromRequestedMove) {
+
+      if (impossibleMoves.indexOf(possibleMove.id) === -1 && possibleMove.distanceFromRequestedMove < closestMove.distanceFromRequestedMove) {
         closestMove = possibleMove;
       }
     });
 
+    this.alreadyVisited.push(`${closestMove.x},${closestMove.y}`);
     this.currentPosition.x = closestMove.x;
     this.currentPosition.y = closestMove.y;
 
     if (this.currentPosition.x === this.requestedPosition.x && this.currentPosition.y === this.requestedPosition.y) {
       this.requestedPosition = undefined;
+      this.alreadyVisited = [];
     }
   }
 
