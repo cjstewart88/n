@@ -1,46 +1,49 @@
 import { Player} from './player';
+import { Game } from './game';
 
 export class Engine {
-  public canvas: any;
-  public ctx: any;
+  private player: Player;
+  private level: any;
 
-  public players: Player[];
+  private canvas: any;
+  private ctx: any;
 
-  constructor(opts: { players: Player[] }) {
-    this.players = opts.players;
+  constructor(game: Game) {
+    this.level = game.level;
+    this.player = game.player;
 
     this.canvas = document.getElementById('level');
     this.ctx = this.canvas.getContext('2d');
+    this.canvas.width = 800;
+    this.canvas.height = 600;
 
-    this.setCanvasSize()
-
-    window.addEventListener('resize', this.setCanvasSize.bind(this), false);
     this.draw();
   }
 
-  private setCanvasSize() {
-    this.canvas = document.getElementById('level');
-    this.canvas.width = window.innerWidth;
-    this.canvas.height = window.innerHeight;
-  }
-
   private draw() {
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.drawPlayers();
-    this.drawDummyWall();
+    this.ctx.clearRect(0, 0, 800, 600);
+    this.player.move();
+    this.drawLevel();
     window.requestAnimationFrame(this.draw.bind(this));
   }
 
-  private drawDummyWall() {
-    this.ctx.fillStyle = 'rgb(255, 0, 0)';
-    this.ctx.fillRect(200, 200, 100, 10);
-  }
+  private drawLevel() {
+    this.level.forEach((row: any[], i: number) => {
+      row.forEach((cellValue: string, ii: number) => {
+        if (cellValue === 'E') {
+          return;
+        }
 
-  private drawPlayers() {
-    this.players.forEach(player => {
-      player.move();
-      this.ctx.fillStyle = 'rgb(0, 0, 0)';
-      this.ctx.fillRect(player.currentPosition.x, player.currentPosition.y, 10, 10);
+        if (cellValue === 'W') {
+          this.ctx.fillStyle = 'rgb(255, 0, 0)';
+        } else if (cellValue === 'P') {
+          this.ctx.fillStyle = 'rgb(0, 0, 0)';
+        }
+
+        let x = ii*10;
+        let y = i*10;
+        this.ctx.fillRect(x, y, 10, 10);
+      });
     });
   }
 }

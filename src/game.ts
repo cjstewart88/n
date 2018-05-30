@@ -1,27 +1,17 @@
 import { Engine } from './engine';
 import { Player } from './player';
+import { levelOne } from './levels/one';
 
-class Game {
+export class Game {
   public engine: Engine;
-  public players: Player[];
+  public player: Player;
+  public level: any;
 
   constructor() {
-    this.connect();
-
-    this.engine = new Engine({
-      players: this.players
-    });
-  }
-
-  public connect() {
-    this.players = [];
-  }
-
-  public join() {
-    const player = new Player();
-    this.players.push(player);
+    this.level = levelOne;
+    this.player = new Player(this);
+    this.engine = new Engine(this);
   }
 }
 
 const game = new Game();
-game.join();
