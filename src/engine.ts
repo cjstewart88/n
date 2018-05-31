@@ -1,9 +1,10 @@
+import { Assets } from './assets';
 import { Player} from './player';
 import { Game } from './game';
 import * as PF from 'pathfinding';
 
-
 export class Engine {
+  private imgs: any;
   private player: Player;
   private level: any;
   private zeroOneMatrixOfLevel: any;
@@ -14,6 +15,7 @@ export class Engine {
   private ctx: any;
 
   constructor(game: Game) {
+    this.imgs = game.assets.imgs;
     this.level = game.level;
     this.zeroOneMatrixOfLevel = this.toZeroOneMatrix();
     this.player = game.player;
@@ -40,7 +42,7 @@ export class Engine {
     for (let y = 0; y < nRow; y++) {
       matrix[y] = new Array(nCol);
       for (let x = 0; x < nCol; x++) {
-        matrix[y][x] = this.level[y][x] === 'W' ?  1 : 0;
+        matrix[y][x] = this.level[y][x] === 'T' ?  1 : 0;
       }
     }
 
@@ -76,19 +78,18 @@ export class Engine {
     
     this.level.forEach((row: any[], i: number) => {
       row.forEach((cellValue: number | string, ii: number) => {
-        if (cellValue === '0') {
-          return;
-        }
+        let x = ii*20;
+        let y = i*20;
 
-        if (cellValue === 'W') {
-          this.ctx.fillStyle = 'rgb(255, 0, 0)';
+        if (cellValue === '0') {
+          this.ctx.drawImage(this.imgs.grass.element, x, y);
+        } else if (cellValue === 'T') {
+          this.ctx.drawImage(this.imgs.tree.element, x, y);
         } else if (cellValue === 'P') {
           this.ctx.fillStyle = 'rgb(0, 0, 0)';
+          this.ctx.fillRect(x, y, 20, 20);
         }
 
-        let x = ii*10;
-        let y = i*10;
-        this.ctx.fillRect(x, y, 10, 10);
       });
     });
   }

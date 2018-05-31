@@ -11,8 +11,8 @@ export class Player {
 
   private move(event: MouseEvent) {
     this.requestedPosition = {
-      x: Math.floor(event.offsetX/10),
-      y: Math.floor(event.offsetY/10)
+      x: Math.floor(event.offsetX/20),
+      y: Math.floor(event.offsetY/20)
     }
   }
 }
