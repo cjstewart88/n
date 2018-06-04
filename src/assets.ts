@@ -1,7 +1,8 @@
 export class Assets {
   public imgs:any = {
-    grass: { path: 'images/grass.png', element: null },
-    tree: { path: 'images/tree.png', element: null }
+    ground: { path: 'images/ground.png', element: null },
+    player: { path: 'images/player.png', element: null },
+    space: { path: 'images/space.png', element: null }
   }
 
   private loadedImgs = 0;
@@ -21,6 +22,5 @@ export class Assets {
       }
 
     }
-    console.log(this.imgs)
   }
 }

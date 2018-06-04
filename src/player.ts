@@ -3,6 +3,7 @@ import { Game } from './game';
 export class Player {
   public currentPosition = { x: 0, y: 0 };
   public requestedPosition: { x: number, y: number } | undefined;
+  public direction = 'PR1';
   
   constructor(game: Game) {
     document.getElementById('level')
