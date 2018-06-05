@@ -31,7 +31,7 @@ export class Engine {
     this.canvas = document.getElementById('level');
     this.ctx = this.canvas.getContext('2d');
     this.canvas.width = 800;
-    this.canvas.height = 600;
+    this.canvas.height = 640;
 
     this.fpsInterval = 1000 / this.fps;
     this.then = Date.now();
@@ -44,12 +44,11 @@ export class Engine {
     this.now = Date.now();
     this.elapsed = this.now - this.then;
     // if enough time has ela
-      window.requestAnimationFrame(this.animate.bind(this));
-    
-    if (this.elapsed > this.fpsInterval) {
+    window.requestAnimationFrame(this.animate.bind(this));
 
-        // Get ready for next frame by setting then=now, but also adjust for your
-        // specified fpsInterval not being a multiple of RAF's interval (16.7ms)
+    if (this.elapsed > this.fpsInterval) {
+      // Get ready for next frame by setting then=now, but also adjust for your
+      // specified fpsInterval not being a multiple of RAF's interval (16.7ms)
       this.then = this.now - (this.elapsed % this.fpsInterval);
       this.movePlayerIfRequested();
       this.drawLevel();
@@ -64,7 +63,7 @@ export class Engine {
     for (let y = 0; y < nRow; y++) {
       matrix[y] = new Array(nCol);
       for (let x = 0; x < nCol; x++) {
-        matrix[y][x] = this.level[y][x] === 'A' ?  1 : 0;
+        matrix[y][x] = this.level[y][x] === 'F' ?  0 : 1;
       }
     }
 
@@ -80,7 +79,7 @@ export class Engine {
       const pathFinder = new PF.DijkstraFinder();
       const grid = new PF.Grid(this.zeroOneMatrixOfLevel);
       this.pathToRequestedPosition = pathFinder.findPath(this.player.currentPosition.x, this.player.currentPosition.y, this.player.requestedPosition.x, this.player.requestedPosition.y, grid);
-    } 
+    }
 
     if (this.pathToRequestedPosition.length === 0) {
       this.player.requestedPosition = undefined;
@@ -90,103 +89,35 @@ export class Engine {
 
     const nextPlayerPosition = this.pathToRequestedPosition.shift();
 
-    this.replaceMatrixValuesForPlayer(nextPlayerPosition);
+    this.level[this.player.currentPosition.y][this.player.currentPosition.x] = 'F';
 
     this.player.currentPosition.x = nextPlayerPosition[0];
     this.player.currentPosition.y = nextPlayerPosition[1];
-  }
 
-  private replaceMatrixValuesForPlayer(nextPlayerPosition: number[]) {
-    let oldPlayerDirection = this.player.direction.charAt(1); // R, L, U, D
-    let oldSpritePos = parseInt(this.player.direction.charAt(2)); // 1, 2, 3, 4
+    this.level[this.player.currentPosition.y][this.player.currentPosition.x] = 'P';
 
-    if (nextPlayerPosition[1] === this.player.currentPosition.y) {
-      if ((this.player.currentPosition.x - nextPlayerPosition[0]) < 0) {
-        if (oldPlayerDirection !== 'R' || oldSpritePos === 4) {
-          this.player.direction = 'PR1';
-        } else {
-          this.player.direction = `PR${oldSpritePos+1}`;
-        }
-      } else {
-        if (oldPlayerDirection !== 'L' || oldSpritePos === 4) {
-          this.player.direction = 'PL1';
-        } else {
-          this.player.direction = `PL${oldSpritePos+1}`;
-        }  
-      }
-    } else if (nextPlayerPosition[0] === this.player.currentPosition.x) {
-      if ((this.player.currentPosition.y - nextPlayerPosition[1]) < 0) {
-        if (oldPlayerDirection !== 'D' || oldSpritePos === 4) {
-          this.player.direction = 'PD1';
-        } else {
-          this.player.direction = `PD${oldSpritePos+1}`;
-        }
-      } else {
-        if (oldPlayerDirection !== 'U' || oldSpritePos === 4) {
-          this.player.direction = 'PU1';
-        } else {
-          this.player.direction = `PU${oldSpritePos+1}`;
-        }
-      }
-    }
-
-    this.level[nextPlayerPosition[1]][nextPlayerPosition[0]] = this.player.direction;
-    this.level[this.player.currentPosition.y][this.player.currentPosition.x] = '0';
   }
 
   private drawLevel() {
     this.ctx.clearRect(0, 0, 800, 600);
-    
+
     this.level.forEach((row: any[], i: number) => {
       row.forEach((cellValue: number | string, ii: number) => {
-        let x = ii*20;
-        let y = i*20;
+        let x = ii*32;
+        let y = i*32;
+
+        if (cellValue === '0') {
+          this.ctx.fillStyle = '#000';
+          this.ctx.fillRect(x, y, 32, 32);
+          return;
+        }
 
         this.ctx.drawImage(this.imgs.ground.element, x, y);
 
-        if (cellValue === 'A') {
-          this.ctx.drawImage(this.imgs.space.element, 80, 0, 20, 20, x, y, 20, 20);
-          return;
-        } else if  (cellValue  === 'B') {
-          this.ctx.drawImage(this.imgs.space.element, 20, 0, 20, 20, x, y, 20, 20);
-        } else if  (cellValue  === 'C') {
-          this.ctx.drawImage(this.imgs.space.element, 40, 0, 20, 20, x, y, 20, 20);
-        } else if  (cellValue  === 'D') {
-          this.ctx.drawImage(this.imgs.space.element, 60, 0, 20, 20, x, y, 20, 20);
-        } 
-        
-        if (cellValue === 'PD1') {
-          this.ctx.drawImage(this.imgs.player.element, 0, 0, 20, 20, x, y, 20, 20);
-        } else if (cellValue === 'PD2') {
-          this.ctx.drawImage(this.imgs.player.element, 20, 0, 20, 20, x, y, 20, 20);
-        } else if (cellValue === 'PD3') {
-          this.ctx.drawImage(this.imgs.player.element, 40, 0, 20, 20, x, y, 20, 20);
-        } else if (cellValue === 'PD4') {
-          this.ctx.drawImage(this.imgs.player.element, 60, 0, 20, 20, x, y, 20, 20);
-        } else if (cellValue === 'PL1') {
-          this.ctx.drawImage(this.imgs.player.element, 80, 0, 20, 20, x, y, 20, 20);
-        } else if (cellValue === 'PL2') {
-          this.ctx.drawImage(this.imgs.player.element, 100, 0, 20, 20, x, y, 20, 20);
-        } else if (cellValue === 'PL3') {
-          this.ctx.drawImage(this.imgs.player.element, 120, 0, 20, 20, x, y, 20, 20);
-        } else if (cellValue === 'PL4') {
-          this.ctx.drawImage(this.imgs.player.element, 140, 0, 20, 20, x, y, 20, 20);
-        } else if (cellValue === 'PR1') {
-          this.ctx.drawImage(this.imgs.player.element, 160, 0, 20, 20, x, y, 20, 20);
-        } else if (cellValue === 'PR2') {
-          this.ctx.drawImage(this.imgs.player.element, 180, 0, 20, 20, x, y, 20, 20);
-        } else if (cellValue === 'PR3') {
-          this.ctx.drawImage(this.imgs.player.element, 200, 0, 20, 20, x, y, 20, 20);
-        } else if (cellValue === 'PR4') {
-          this.ctx.drawImage(this.imgs.player.element, 220, 0, 20, 20, x, y, 20, 20);
-        }  else if (cellValue === 'PU1') {
-          this.ctx.drawImage(this.imgs.player.element, 240, 0, 20, 20, x, y, 20, 20);
-        } else if (cellValue === 'PU2') {
-          this.ctx.drawImage(this.imgs.player.element, 260, 0, 20, 20, x, y, 20, 20);
-        } else if (cellValue === 'PU3') {
-          this.ctx.drawImage(this.imgs.player.element, 280, 0, 20, 20, x, y, 20, 20);
-        } else if (cellValue === 'PU4') {
-          this.ctx.drawImage(this.imgs.player.element, 300, 0, 20, 20, x, y, 20, 20);
+
+        if (cellValue === 'P') {
+          this.ctx.fillStyle = '#444';
+          this.ctx.fillRect(x, y, 32, 32);
         }
       });
     });

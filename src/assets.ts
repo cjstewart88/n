@@ -1,17 +1,15 @@
 export class Assets {
   public imgs:any = {
-    ground: { path: 'images/ground.png', element: null },
-    player: { path: 'images/player.png', element: null },
-    space: { path: 'images/space.png', element: null }
+    ground: { path: 'images/ground.png', element: null }
   }
 
   private loadedImgs = 0;
-  private numberOfImgs = Object.keys(this.imgs).length; 
+  private numberOfImgs = Object.keys(this.imgs).length;
 
   constructor(finishedLoadingAssets: any) {
     for (const key in this.imgs) {
       const img = this.imgs[key];
-      
+
       img.element = new Image();
       img.element.src = img.path;
 

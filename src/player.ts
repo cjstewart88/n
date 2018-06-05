@@ -3,8 +3,7 @@ import { Game } from './game';
 export class Player {
   public currentPosition = { x: 0, y: 0 };
   public requestedPosition: { x: number, y: number } | undefined;
-  public direction = 'PR1';
-  
+
   constructor(game: Game) {
     document.getElementById('level')
       .addEventListener('click', this.move.bind(this));
@@ -12,8 +11,8 @@ export class Player {
 
   private move(event: MouseEvent) {
     this.requestedPosition = {
-      x: Math.floor(event.offsetX/20),
-      y: Math.floor(event.offsetY/20)
+      x: Math.floor(event.offsetX/32),
+      y: Math.floor(event.offsetY/32)
     }
   }
 }
