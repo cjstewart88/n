@@ -1,7 +1,7 @@
 import { Game } from './game';
 
 export class Player {
-  public currentPosition = { x: 0, y: 0 };
+  public currentPosition: { x: number, y: number };
   public requestedPosition: { x: number, y: number } | undefined;
 
   constructor(game: Game) {
