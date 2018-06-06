@@ -1,6 +1,6 @@
 export class Assets {
   public imgs:any = {
-    ground: { path: 'images/ground.png', element: null }
+    ground: { path: './images/ground.png', element: null }
   }
 
   private loadedImgs = 0;
