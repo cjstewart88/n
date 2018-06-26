@@ -48,54 +48,51 @@ export class Engine {
           this.ctx.drawImage(this.imgs.ground.element, x, y);
         }
 
-        // player lighting
-        let playerMinXLight = (this.player.currentPosition.x - 1) * 32;
-        let playerMaxXLight = (this.player.currentPosition.x + 1) * 32;
-        let playerMinYLight = (this.player.currentPosition.y - 1) * 32;
-        let playerMaxYLight = (this.player.currentPosition.y + 1) * 32;
-
-        if (((x >= playerMinXLight && x <= playerMaxXLight) && (y >= playerMinYLight && y <= playerMaxYLight))) {
-          // Fill with "light"
+        if (this.inPlayerSight(x, y)) {
+          // the players torch light
           let grd = this.ctx.createRadialGradient((this.player.currentPosition.x * 32)+16, (this.player.currentPosition.y * 32)+16, 0.000, (this.player.currentPosition.x * 32)+16, (this.player.currentPosition.y * 32)+16, 50);
-          grd.addColorStop(0,"white");
-          grd.addColorStop(1,"rgba(0,0,0,0.1)");
+          grd.addColorStop(0.1,"rgba(254, 185, 98, 0.5)");
+          grd.addColorStop(1.0,"rgba(0,0,0,0.9)");
           this.ctx.fillStyle = grd;
           this.ctx.fillRect(x, y, 32, 32);
 
-          // next level exit
-          if (cellValue === 'N') {
-            this.ctx.fillStyle = '#ff8300';
-            this.ctx.fillRect(x, y, 32, 32);
-          }
-
-          // previous level exit
-          if (cellValue === 'P') {
-            this.ctx.fillStyle = '#ffee00';
-            this.ctx.fillRect(x, y, 32, 32);
-          }
+          // draw items with higher visibilitly because of the players location
+          this.drawLevelExits(cellValue, x, y);
         } else {
-          // next level exit
-          if (cellValue === 'N') {
-            this.ctx.fillStyle = '#ff8300';
-            this.ctx.fillRect(x, y, 32, 32);
-          }
+          // draw items with lower visibilitly because of the players location
+          this.drawLevelExits(cellValue, x, y);
 
-          // previous level exit
-          if (cellValue === 'P') {
-            this.ctx.fillStyle = '#ffee00';
-            this.ctx.fillRect(x, y, 32, 32);
-          }
-
+          // the shadows
           this.ctx.fillStyle = 'rgba(0,0,0,0.9)';
           this.ctx.fillRect(x, y, 32, 32);
         }
       });
     });
 
-    // x,y,r,x1,y1,r1
-
-
     this.ctx.fillStyle = '#444';
     this.ctx.fillRect(this.player.currentPosition.x * 32, this.player.currentPosition.y * 32, 32, 32);
+  }
+
+  private inPlayerSight(x: number, y: number): boolean {
+    let playerMinXLight = (this.player.currentPosition.x - 1) * 32;
+    let playerMaxXLight = (this.player.currentPosition.x + 1) * 32;
+    let playerMinYLight = (this.player.currentPosition.y - 1) * 32;
+    let playerMaxYLight = (this.player.currentPosition.y + 1) * 32;
+
+    return ((x >= playerMinXLight && x <= playerMaxXLight) && (y >= playerMinYLight && y <= playerMaxYLight))
+  }
+
+  private drawLevelExits(type: any, x: number, y: number) {
+    // next level exit
+    if (type === 'N') {
+      this.ctx.fillStyle = '#ff8300';
+      this.ctx.fillRect(x, y, 32, 32);
+    }
+
+    // previous level exit
+    if (type === 'P') {
+      this.ctx.fillStyle = '#ffee00';
+      this.ctx.fillRect(x, y, 32, 32);
+    }
   }
 }
