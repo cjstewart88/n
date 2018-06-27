@@ -29,6 +29,7 @@ export class Engine {
   }
 
   private drawLevel() {
+    this.ctx.globalCompositeOperation = 'source-over';
     this.ctx.clearRect(0, 0, 800, 640);
 
     this.game.level.map.forEach((row: any[], i: number) => {
@@ -49,13 +50,6 @@ export class Engine {
         }
 
         if (this.inPlayerSight(x, y)) {
-          // the players torch light
-          let grd = this.ctx.createRadialGradient((this.player.currentPosition.x * 32)+16, (this.player.currentPosition.y * 32)+16, 0.000, (this.player.currentPosition.x * 32)+16, (this.player.currentPosition.y * 32)+16, 50);
-          grd.addColorStop(0.1,"rgba(254, 185, 98, 0.5)");
-          grd.addColorStop(1.0,"rgba(0,0,0,0.9)");
-          this.ctx.fillStyle = grd;
-          this.ctx.fillRect(x, y, 32, 32);
-
           // draw items with higher visibilitly because of the players location
           this.drawLevelExits(cellValue, x, y);
         } else {
