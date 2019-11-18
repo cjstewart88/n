@@ -15,6 +15,7 @@ export class Player {
   private handleControls(event: KeyboardEvent) {
     switch (event.key) {
       case 'Enter':
+        if (this.game.inProgress) return;
         this.game.start();
         break;
       case 'ArrowLeft':
