@@ -57,7 +57,7 @@ export class Engine {
           this.drawLevelExits(cellValue, x, y);
 
           // the shadows
-          this.ctx.fillStyle = 'rgba(0,0,0,0.9)';
+          this.ctx.fillStyle = 'rgba(0,0,0)';
           this.ctx.fillRect(x, y, 32, 32);
         }
       });
@@ -68,10 +68,10 @@ export class Engine {
   }
 
   private inPlayerSight(x: number, y: number): boolean {
-    let playerMinXLight = (this.player.currentPosition.x - 1) * 32;
-    let playerMaxXLight = (this.player.currentPosition.x + 1) * 32;
-    let playerMinYLight = (this.player.currentPosition.y - 1) * 32;
-    let playerMaxYLight = (this.player.currentPosition.y + 1) * 32;
+    let playerMinXLight = (this.player.currentPosition.x - 2) * 32;
+    let playerMaxXLight = (this.player.currentPosition.x + 2) * 32;
+    let playerMinYLight = (this.player.currentPosition.y - 2) * 32;
+    let playerMaxYLight = (this.player.currentPosition.y + 2) * 32;
 
     return ((x >= playerMinXLight && x <= playerMaxXLight) && (y >= playerMinYLight && y <= playerMaxYLight))
   }
@@ -84,7 +84,7 @@ export class Engine {
     }
 
     // previous level exit
-    if (type === 'P') {
+    if (type === 'E') {
       this.ctx.fillStyle = '#ffee00';
       this.ctx.fillRect(x, y, 32, 32);
     }

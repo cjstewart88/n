@@ -8,33 +8,49 @@ export class Game {
   public engine: Engine;
   public player: Player;
   public level: any;
+  public inProgress = false;
+
+  private startTime: number;
 
   constructor() {
     this.assets = new Assets(() => {
       this.player = new Player(this);
-      this.setLevel({ name: 'one' });
+      this.setLevel('one');
       this.engine = new Engine(this);
     });
   }
 
-  public setLevel(opts: { name?: string, direction?: 'next' | 'previous' }) {
+  public setLevel(name?: string) {
     let setLevelTo: string;
 
-    if (opts.name) {
-      setLevelTo = opts.name;
+    if (name) {
+      setLevelTo = name;
     } else {
-      setLevelTo = this.level[`${opts.direction}Level`];
+      setLevelTo = this.level.nextLevel;
     }
 
     this.level = Levels[setLevelTo];
+    this.player.currentPosition = { x: 0, y: 0 };
+  }
 
-    if (opts.direction) {
-      if (opts.direction === 'previous') {
-        this.player.currentPosition = this.level.nextLevelCordinates;
-      } else {
-        this.player.currentPosition = { x: 0, y: 0 };
-      }
-    }
+  public start() {
+    this.inProgress =  true;
+    this.startTime = Date.now();
+    this.setGameCopy('Times ticking... get to the choppa.')
+  }
+
+  public end() {
+    this.setGameCopy(`It took you ${this.secondsToComplete()} seconds. You can do better,  press 'Enter' to give it another go.`);
+    this.inProgress =  false;
+    this.setLevel('one');
+  }
+
+  private setGameCopy(copy: string) {
+    document.getElementsByClassName('game-copy')[0].innerHTML = copy;
+  }
+
+  private secondsToComplete() {
+    return Math.floor((Date.now() - this.startTime)/1000);
   }
 }
 

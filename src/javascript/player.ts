@@ -14,21 +14,30 @@ export class Player {
 
   private handleControls(event: KeyboardEvent) {
     switch (event.key) {
+      case 'Enter':
+        this.game.start();
+        break;
       case 'ArrowLeft':
+        if (!this.game.inProgress) return;
         this.requestedPosition = { x: this.currentPosition.x - 1, y: this.currentPosition.y }
+        this.checkRequestedMove();
         break;
       case 'ArrowRight':
+          if (!this.game.inProgress) return;
         this.requestedPosition = { x: this.currentPosition.x + 1, y: this.currentPosition.y }
+        this.checkRequestedMove();
         break;
       case 'ArrowUp':
+          if (!this.game.inProgress) return;
         this.requestedPosition = { x: this.currentPosition.x, y: this.currentPosition.y - 1 }
+        this.checkRequestedMove();
         break;
       case 'ArrowDown':
+          if (!this.game.inProgress) return;
         this.requestedPosition = { x: this.currentPosition.x, y: this.currentPosition.y + 1 }
+        this.checkRequestedMove();
         break;
     }
-
-    this.checkRequestedMove();
   }
 
   private checkRequestedMove() {
@@ -43,10 +52,10 @@ export class Player {
         this.requestedPosition = undefined;
         break;
       case 'N':
-        this.game.setLevel({ direction: 'next' });
+        this.game.setLevel();
         break;
-      case 'P':
-        this.game.setLevel({ direction: 'previous' });
+      case 'E':
+        this.game.end();
         break;
       default:
         this.currentPosition = this.requestedPosition;
