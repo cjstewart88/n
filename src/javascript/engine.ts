@@ -57,21 +57,21 @@ export class Engine {
           this.drawLevelExits(cellValue, x, y);
 
           // the shadows
-          this.ctx.fillStyle = 'rgba(0,0,0)';
+          this.ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
           this.ctx.fillRect(x, y, 32, 32);
         }
       });
     });
 
     this.ctx.fillStyle = '#444';
-    this.ctx.fillRect(this.player.currentPosition.x * 32, this.player.currentPosition.y * 32, 32, 32);
+    this.ctx.fillRect(this.player.currentPosition.x, this.player.currentPosition.y, 16, 16);
   }
 
   private inPlayerSight(x: number, y: number): boolean {
-    let playerMinXLight = (this.player.currentPosition.x - 2) * 32;
-    let playerMaxXLight = (this.player.currentPosition.x + 2) * 32;
-    let playerMinYLight = (this.player.currentPosition.y - 2) * 32;
-    let playerMaxYLight = (this.player.currentPosition.y + 2) * 32;
+    let playerMinXLight = (this.player.currentPosition.x - 64);
+    let playerMaxXLight = (this.player.currentPosition.x + 64);
+    let playerMinYLight = (this.player.currentPosition.y - 64);
+    let playerMaxYLight = (this.player.currentPosition.y + 64);
 
     return ((x >= playerMinXLight && x <= playerMaxXLight) && (y >= playerMinYLight && y <= playerMaxYLight))
   }

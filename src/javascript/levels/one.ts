@@ -1,4 +1,5 @@
 export let one = {
+  name: 'one',
   nextLevel: 'two',
   nextLevelCordinates: { x: 24, y: 11 },
   map: [

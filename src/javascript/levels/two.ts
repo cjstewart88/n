@@ -1,4 +1,5 @@
 export let two = {
+  name: 'two',
   nextLevel: 'three',
   previousLevel: 'one',
   nextLevelCordinates: { x: 8, y: 10},

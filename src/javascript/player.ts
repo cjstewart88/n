@@ -9,54 +9,45 @@ export class Player {
   constructor(game: Game) {
     this.game = game;
 
-    window.addEventListener('keydown', this.handleControls.bind(this))
+    document.getElementById('level').addEventListener('click', this.tryToStart.bind(this));
+    document.getElementById('level').onmousemove = this.handleMovement.bind(this);
   }
 
-  private handleControls(event: KeyboardEvent) {
-    switch (event.key) {
-      case 'Enter':
-        if (this.game.inProgress) return;
-        this.game.start();
-        break;
-      case 'ArrowLeft':
-        if (!this.game.inProgress) return;
-        this.requestedPosition = { x: this.currentPosition.x - 1, y: this.currentPosition.y }
-        this.checkRequestedMove();
-        break;
-      case 'ArrowRight':
-          if (!this.game.inProgress) return;
-        this.requestedPosition = { x: this.currentPosition.x + 1, y: this.currentPosition.y }
-        this.checkRequestedMove();
-        break;
-      case 'ArrowUp':
-          if (!this.game.inProgress) return;
-        this.requestedPosition = { x: this.currentPosition.x, y: this.currentPosition.y - 1 }
-        this.checkRequestedMove();
-        break;
-      case 'ArrowDown':
-          if (!this.game.inProgress) return;
-        this.requestedPosition = { x: this.currentPosition.x, y: this.currentPosition.y + 1 }
-        this.checkRequestedMove();
-        break;
+  private handleMovement(event: MouseEvent) {
+    if (!this.game.inProgress) return;
+    this.requestedPosition = { x: event.offsetX - 8, y: event.offsetY - 8 };
+    this.checkRequestedMove();
+  }
+
+  private tryToStart(event: MouseEvent) {
+    if (this.game.inProgress) return;
+    if ((event.offsetX >= 0 && event.offsetX <= 16) && (event.offsetY >= 0 && event.offsetY <= 16)) {
+      this.game.start();
     }
   }
 
   private checkRequestedMove() {
     const levelMap = this.game.level.map;
 
-    if (!levelMap[this.requestedPosition.y] || !levelMap[this.requestedPosition.y][this.requestedPosition.x]) {
+    const row = Math.round(this.requestedPosition.y/32);
+    const col = Math.round(this.requestedPosition.x/32);
+
+    if (!levelMap[row] || !levelMap[row][col]) {
       return;
     }
-
-    switch (levelMap[this.requestedPosition.y][this.requestedPosition.x]) {
+    
+    switch (levelMap[row][col]) {
       case '0':
-        this.requestedPosition = undefined;
+        this.game.end(true);
+        this.currentPosition = { x: 0, y: 0 };
         break;
       case 'N':
-        this.game.setLevel();
+        this.game.nextLevel();
+        this.currentPosition = { x: 0, y: 0 };
         break;
       case 'E':
         this.game.end();
+        this.currentPosition = { x: 0, y: 0 };
         break;
       default:
         this.currentPosition = this.requestedPosition;
