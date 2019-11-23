@@ -57,7 +57,7 @@ export class Engine {
           this.drawLevelExits(cellValue, x, y);
 
           // the shadows
-          this.ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+          this.ctx.fillStyle = 'rgba(0, 0, 0)';
           this.ctx.fillRect(x, y, 32, 32);
         }
       });
