@@ -1,4 +1,3 @@
-import { Assets } from './assets';
 import { Player} from './player';
 import { Game } from './game';
 
@@ -83,7 +82,7 @@ export class Engine {
       this.ctx.fillRect(x, y, 32, 32);
     }
 
-    // previous level exit
+    // final exit
     if (type === 'E') {
       this.ctx.fillStyle = '#ffee00';
       this.ctx.fillRect(x, y, 32, 32);
