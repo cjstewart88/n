@@ -80,13 +80,13 @@ export class Engine {
   private drawLevelExits(type: any, x: number, y: number) {
     // next level exit
     if (type === 'N') {
-      this.ctx.fillStyle = '#000';
+      this.ctx.fillStyle = 'red';
       this.ctx.fillRect(x, y, 32, 32);
     }
 
     // final exit
     if (type === 'E') {
-      this.ctx.fillStyle = '#000';
+      this.ctx.fillStyle = 'red';
       this.ctx.fillRect(x, y, 32, 32);
     }
   }

@@ -16,7 +16,7 @@ export class Game {
   constructor() {
     this.assets = new Assets(() => {
       this.player = new Player(this);
-      this.level = Levels.two;
+      this.level = Levels.one;
       this.engine = new Engine(this);
     });
     
