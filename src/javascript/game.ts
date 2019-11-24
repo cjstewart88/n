@@ -9,14 +9,20 @@ export class Game {
   public player: Player;
   public level: any;
   public inProgress = false;
+  public crying = false;
 
   private startTime: number;
 
   constructor() {
     this.assets = new Assets(() => {
       this.player = new Player(this);
-      this.level = Levels.one;
+      this.level = Levels.two;
       this.engine = new Engine(this);
+    });
+    
+    document.getElementsByTagName('button')[0].addEventListener('click', (e) => {
+      this.crying = !this.crying;
+      e.srcElement.innerHTML = (this.crying ? 'Please make it stop.' : 'Make me cry.');
     });
   }
 
@@ -47,11 +53,17 @@ export class Game {
     this.inProgress =  false;
   }
 
+  public updateTimeDisplay() {
+    if (this.startTime) {
+      document.getElementsByClassName('time')[0].innerHTML = `${this.timeToComplete} seconds `;
+    }
+  }
+
   private setGameCopy(copy: string) {
     document.getElementsByClassName('game-copy')[0].innerHTML = copy;
   }
 
-  private get timeToComplete() {
+  private get timeToComplete(): any {
     return Math.floor((Date.now() - this.startTime)/1000);
   }
 }

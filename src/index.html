@@ -9,11 +9,28 @@
         color: #fff;
         text-align: center;
         font-size: 18px;
+        font-family: 'Courier New', Courier, monospace;
       }
 
       canvas {
         margin: 0 auto;
         display: block;
+      }
+
+      .time { 
+        position: fixed;
+        bottom: 10;
+        left: 10;
+        margin: 0;
+      }
+
+      button {
+        border: none;
+        background: white;
+        color: black;
+        margin-top: 5px;
+        padding: 10px;
+        font-family: 'Courier New', Courier, monospace;
       }
     </style>
   </head>
@@ -22,6 +39,8 @@
       How fast can you escape? Navigate the maze using your mouse... the game starts when you click the gray box.
     </p>
     <canvas id="level"></canvas>
+    <button>Make me cry.</button>
+    <p class="time"></p>
   </body>
   <script src="javascript/bundle.js"></script>
 </html>

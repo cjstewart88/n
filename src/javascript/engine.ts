@@ -28,6 +28,7 @@ export class Engine {
   }
 
   private drawLevel() {
+    this.game.updateTimeDisplay();
     this.ctx.globalCompositeOperation = 'source-over';
     this.ctx.clearRect(0, 0, 800, 640);
 
@@ -45,7 +46,8 @@ export class Engine {
 
         // ground tile
         if (cellValue === 'F') {
-          this.ctx.drawImage(this.imgs.ground.element, x, y);
+          this.ctx.fillStyle = this.game.crying ? "#"+((1<<24)*Math.random()|0).toString(16) : '#fff';
+          this.ctx.fillRect(x, y, 32, 32);
         }
 
         if (this.inPlayerSight(x, y)) {
@@ -62,7 +64,7 @@ export class Engine {
       });
     });
 
-    this.ctx.fillStyle = '#444';
+    this.ctx.fillStyle = 'red';
     this.ctx.fillRect(this.player.currentPosition.x, this.player.currentPosition.y, 16, 16);
   }
 
@@ -78,13 +80,13 @@ export class Engine {
   private drawLevelExits(type: any, x: number, y: number) {
     // next level exit
     if (type === 'N') {
-      this.ctx.fillStyle = '#ff8300';
+      this.ctx.fillStyle = '#000';
       this.ctx.fillRect(x, y, 32, 32);
     }
 
     // final exit
     if (type === 'E') {
-      this.ctx.fillStyle = '#ffee00';
+      this.ctx.fillStyle = '#000';
       this.ctx.fillRect(x, y, 32, 32);
     }
   }
